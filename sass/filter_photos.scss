@@ -1,0 +1,82 @@
+@import "compass/css3";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+//复选框被选中时自己的样式变化 和 同类盒子的展示
+@mixin label_checked($id,$bgcolor) {
+    &[id=#{$id}]:checked {
+        + label {
+            background-color: $bgcolor ;
+        }
+        ~ .#{$id} {
+            width: 300px;
+            margin: 10px;
+            opacity: 1;
+        }
+    }
+}
+//高优先级盒子隐藏
+%hide-highest-priority{
+	width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+}
+//盒子隐藏
+%hide{
+	width: 0 ;
+    margin: 0 ;
+    padding: 0 ;
+    opacity: 0 ;
+}
+.container {
+    margin: 0 auto;
+    font-size: 0;
+    text-align: center;width: 90%;
+    //新版本Flexbox模型
+    display: flex;
+    flex-wrap:wrap;
+    input[type='checkbox'] {
+        display: none;
+        + label {
+            margin-bottom: 20px;
+            width: 300px;height: 30px;
+            line-height: 1.5;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            color: #000;
+            background-color: #eee;
+            font-size: 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        @include label_checked('men',red);
+        @include label_checked('women',blue);
+        @include label_checked('children',yellow);
+        &[id='reset']:checked {
+            + label{background-color: purple;}
+            ~ .men,
+            ~ .women,
+            ~.children {
+                @extend %hide-highest-priority;
+            }
+        }
+    }
+    .tile {
+        @extend %hide;
+        @include transition(all 1s);
+        img {
+            width: 100%;
+        }
+    }
+}
+.clearfix {
+    &:before, &:after {
+        display: table;
+        content: ' ';
+    }
+    &:after {
+        clear: both;
+    }
+}
